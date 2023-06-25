@@ -1,13 +1,10 @@
 import knuth.linked.LinkedList
 import knuth.Nil
+import knuth.Cons
+
 fun main() {
-    val list = LinkedList.of(1,2,3,4)
-    val doubled = list.map { number -> number * 2}
-    val even = list.filter { number -> number % 2 == 0}
-    println(list)
-    println(doubled)
-    println(even)
-    println(Nil)
-    println(list.reduce(0) {reduced, item -> reduced + item}.head())
+    val numbers1:Cons<Int> = LinkedList.of(1,2,3)
+    val numbers2:Cons<Int> = LinkedList.of(1,2,3)
+    println(numbers1.compareTo( numbers2))
     println("Hello, Kotlin/Native!")
 }

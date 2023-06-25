@@ -65,12 +65,9 @@ data class Node<T>(val item: T, internal var next: Cons<T>): Cons<T>() {
     }
 
     override fun compare(other: Cons<T>):Int {
-        if(NilType.isNil(other)) {
-            return -1
-        } else if(other == this) {
+        if(other == this) {
             return 0
         }
-
         var self:Cons<T> = this
         var ego = other
 

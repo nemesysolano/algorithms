@@ -1,9 +1,10 @@
 package knuth.linked
 import knuth.linked.LinkedList
 import knuth.Cons
+import knuth.NilType
 import kotlin.test.Test
 import kotlin.test.assertEquals
-
+import kotlin.test.assertNotEquals
 class LinkedListTest {
 
     @Test
@@ -41,4 +42,37 @@ class LinkedListTest {
 
         assertEquals(6, sum)
     }
+
+    @Test
+    fun testEqualsForNotNilAndNilList() {
+        val numbers:Cons<Int> = LinkedList.of(1,2,3)
+        val nil:Cons<Int> = NilType.of()
+        assertNotEquals(0, numbers.compareTo(nil))
+        assertNotEquals(0, nil.compareTo(numbers))
+    }
+
+    @Test
+    fun testEqualsForIdenticalNonEmptyLists() {
+        val numbers1:Cons<Int> = LinkedList.of(1,2,3)
+        val numbers2:Cons<Int> = LinkedList.of(1,2,3)
+        assertEquals(0, numbers1.compareTo( numbers2))
+        assertEquals(0, numbers2.compareTo( numbers2))
+    }
+
+    @Test
+    fun testEqualsForNonEmptyListWithDifferentSize() {
+        val numbers0:Cons<Int> = LinkedList.of(1)
+        val numbers1:Cons<Int> = LinkedList.of(1,3)
+        val numbers2:Cons<Int> = LinkedList.of(1,2,3)
+
+        assertNotEquals(0, numbers1.compareTo( numbers0))
+        assertNotEquals(0, numbers2.compareTo( numbers0))
+
+        assertNotEquals(0, numbers0.compareTo( numbers1))
+        assertNotEquals(0, numbers0.compareTo( numbers2))
+
+        assertNotEquals(0, numbers1.compareTo( numbers2))
+        assertNotEquals(0, numbers2.compareTo( numbers1))
+    }
+
 }
