@@ -56,7 +56,7 @@ class LinkedListTest {
         val numbers1:Cons<Int> = LinkedList.of(1,2,3)
         val numbers2:Cons<Int> = LinkedList.of(1,2,3)
         assertEquals(0, numbers1.compareTo( numbers2))
-        assertEquals(0, numbers2.compareTo( numbers2))
+        assertEquals(0, numbers2.compareTo( numbers1))
     }
 
     @Test
