@@ -17,8 +17,8 @@ class LinkedListTest {
     fun testLinkedListFilter() {
         val numbers:Cons<Int> = LinkedList.of(1,2,3,4)
         val even = numbers.filter {number -> number % 2 == 0}
-        val size = even.reduce(0) {sum, _ -> sum + 1}.head()
-        val sum = even.reduce(0) {sum, number -> sum + number}.head()
+        val size:Int = even.reduce(0) {sum, _ -> sum + 1}.head()
+        val sum:Int = even.reduce(0) {sum, number -> sum + number}.head()
         assertEquals(6, sum)
         assertEquals(size, 2)
     }
@@ -27,7 +27,7 @@ class LinkedListTest {
     fun testLinkedListMap() {
         val numbers:Cons<Int> = LinkedList.of(1,2,3)
         val doubled:Cons<Int> = numbers.map {number -> number * 2}
-        val sum = doubled.reduce(0) {sum, number -> sum + number}.head()
+        val sum:Int = doubled.reduce(0) {sum, number -> sum + number}.head()
         assertEquals(12, sum)
     }
 

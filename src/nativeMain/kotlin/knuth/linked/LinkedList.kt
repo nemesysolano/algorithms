@@ -11,7 +11,7 @@ class LinkedList<T>(private val item: T): Cons<T>() {
     override fun forEach(action: (item: T) -> Unit):Unit = first.forEach(action)
     override fun <R> map(transformer: (item: T) -> R):Cons<R> = first.map(transformer)
     override fun <R> reduce(seed: R, reductor: (reduced:R, item:T) -> R): Cons<R> = first.reduce(seed, reductor)
-
+    override fun compare(other: Cons<T>):Int = first.compare(other)
     override fun filter(predicate: (item: T) -> Boolean): Cons<T> {
         var head:Cons<T> = this.first
         var result:Node<T>? = null

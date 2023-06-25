@@ -63,4 +63,37 @@ data class Node<T>(val item: T, internal var next: Cons<T>): Cons<T>() {
 
         return if(result == null) NilType.of() else result
     }
+
+    override fun compare(other: Cons<T>):Int {
+        if(NilType.isNil(other)) {
+            return -1
+        } else if(other == this) {
+            return 0
+        }
+
+        var self:Cons<T> = this
+        var ego = other
+
+        while(!(NilType.isNil(self) || NilType.isNil(ego))) {
+            if(!(exhaustiveEquals(self.head(), ego.head()))) {
+                return -1
+            }
+
+            self = self.tail()
+            ego = ego.tail()
+        }
+
+        return if(NilType.isNil(self) && NilType.isNil(ego) ) 0 else -1
+    }
+
+    fun exhaustiveEquals(value: T, that: Any?): Boolean {
+        if(value == null && that == null) {
+            return true
+        } else if (that != null) {
+            return that.equals(value)
+        } else {
+            return value!!.equals(that)
+        }
+
+    }
 }
