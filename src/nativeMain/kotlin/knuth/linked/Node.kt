@@ -4,8 +4,7 @@ import knuth.NilType
 
 data class Node<T>(val item: T, internal var next: Cons<T>): Cons<T>() {
     override fun head(): T = item
-    override internal fun tail(): Cons<T> = next
-     @Suppress("UNCHECKED_CAST")
+    override fun tail(): Cons<T> = next
     override fun forEach(action: (item: T) -> Unit){
         var first:Node<T> = this
         var next = first.next
@@ -20,10 +19,9 @@ data class Node<T>(val item: T, internal var next: Cons<T>): Cons<T>() {
         }
     }
 
-    @Suppress("UNCHECKED_CAST")
     override fun <R> map(transformer: (item: T) -> R): Cons<R> {
         var first:Node<T> = this
-        val result = LinkedList<R>(transformer(first.item))
+        val result = LinkedList(transformer(first.item))
         var next = first.next
 
         while(!NilType.isNil(next)) {
@@ -40,7 +38,6 @@ data class Node<T>(val item: T, internal var next: Cons<T>): Cons<T>() {
         return Node(reduced, NilType.of())
     }
 
-    @Suppress("UNCHECKED_CAST")
     override fun filter(predicate: (item: T) -> Boolean): Cons<T> {
         var head:Cons<T> = this
         var result:Node<T>? = null
@@ -61,7 +58,7 @@ data class Node<T>(val item: T, internal var next: Cons<T>): Cons<T>() {
             head = node.next
         }
 
-        return if(result == null) NilType.of() else result
+        return result ?: NilType.of()
     }
 
     override fun compare(other: Cons<T>):Int {
@@ -83,13 +80,13 @@ data class Node<T>(val item: T, internal var next: Cons<T>): Cons<T>() {
         return if(NilType.isNil(self) && NilType.isNil(ego) ) 0 else -1
     }
 
-    fun exhaustiveEquals(value: T, that: Any?): Boolean {
-        if(value == null && that == null) {
-            return true
+    private fun exhaustiveEquals(value: T, that: Any?): Boolean {
+        return if(value == null && that == null) {
+            true
         } else if (that != null) {
-            return that.equals(value)
+            that == value
         } else {
-            return value!!.equals(that)
+            value!! == that
         }
 
     }
