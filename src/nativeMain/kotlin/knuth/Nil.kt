@@ -1,7 +1,7 @@
 package knuth
 class NilType(): Cons<Any?>() {
     override fun head(): Any = Nil
-    override internal fun tail(): Cons<Any?> = Nil
+    override fun tail(): Cons<Any?> = Nil
     override fun forEach(action: (item: Any?) -> Unit) {}
     override fun compare(other: Cons<Any?>):Int {
         return  if(other == this) 0 else -1

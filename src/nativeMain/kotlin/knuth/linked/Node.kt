@@ -2,7 +2,7 @@ package knuth.linked
 import knuth.Cons
 import knuth.NilType
 
-data class Node<T>(val item: T, internal var next: Cons<T>): Cons<T>() {
+data class Node<T>(val item: T, internal var prev: Cons<T>, internal var next: Cons<T>): Cons<T>() {
     override fun head(): T = item
     override fun tail(): Cons<T> = next
     override fun forEach(action: (item: T) -> Unit){
@@ -10,11 +10,9 @@ data class Node<T>(val item: T, internal var next: Cons<T>): Cons<T>() {
         var next = first.next
 
         action(first.item)
-        println(first.item)
         while(!NilType.isNil(next)) {
             first = (next as Node<T>)
             action(first.item)
-            println(first.item)
             next = next.next
         }
     }
@@ -35,7 +33,7 @@ data class Node<T>(val item: T, internal var next: Cons<T>): Cons<T>() {
     override fun <R> reduce(seed: R, reductor: (reduced:R, item:T) -> R): Cons<R> {
         var reduced = seed
         forEach { item-> reduced = reductor(reduced, item) }
-        return Node(reduced, NilType.of())
+        return Node(reduced, NilType.of(), NilType.of())
     }
 
     override fun filter(predicate: (item: T) -> Boolean): Cons<T> {
@@ -47,10 +45,10 @@ data class Node<T>(val item: T, internal var next: Cons<T>): Cons<T>() {
             val node = head as Node<T>
             if(predicate(node.item)) {
                 if(result == null) {
-                    result = Node(node.item, NilType.of())
+                    result = Node(node.item, NilType.of(), NilType.of())
                     tail = result
                 } else {
-                    val next = Node(node.item, NilType.of())
+                    val next = Node(node.item, NilType.of(), NilType.of())
                     tail!!.next = next
                     tail = next
                 }

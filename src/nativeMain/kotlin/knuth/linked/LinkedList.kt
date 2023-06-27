@@ -1,59 +1,40 @@
 package knuth.linked
 import knuth.Cons
 import knuth.NilType
+import kotlinx.cinterop.pin
 
-class LinkedList<T>(item: T): Cons<T>() {
-    private var first = Node(item, NilType.of())
-    private var last:Cons<T> = first
-    override fun head(): T = first.head()
+class LinkedList<T>(): Cons<T>() {
+    private var first:Cons<T> = NilType.of()
+    private var last:Cons<T> =  NilType.of()
+
+    constructor(item: T): this() {
+        this.first = Node(item, NilType.of(), NilType.of())
+        this.last = first
+    }
+
+    override fun head(): T = if(isEmpty()) throw IllegalStateException("Empty lists are headless") else first.head()
     override fun tail(): Cons<T> = first.tail()
     override fun forEach(action: (item: T) -> Unit):Unit = first.forEach(action)
     override fun <R> map(transformer: (item: T) -> R):Cons<R> = first.map(transformer)
     override fun <R> reduce(seed: R, reductor: (reduced:R, item:T) -> R): Cons<R> = first.reduce(seed, reductor)
     override fun compare(other: Cons<T>):Int = first.compare(other)
-    override fun filter(predicate: (item: T) -> Boolean): Cons<T> {
-        var head:Cons<T> = this.first
-        var result:Node<T>? = null
-        var tail:Node<T>? = null
-
-        while(!NilType.isNil(head)) {
-            val node = head as Node<T>
-            if(predicate(node.item)) {
-                if(result == null) {
-                    result = Node(node.item, NilType.of())
-                    tail = result
-                } else {
-                    val next = Node(node.item, NilType.of())
-                    tail!!.next = next
-                    tail = next
-                }
-            }
-            head = node.next
-        }
-
-        return if(result == null) NilType.of() else filteredList(result,tail)
+    override fun filter(predicate: (item: T) -> Boolean): Cons<T> = first.filter(predicate)
+    fun isEmpty(): Boolean = NilType.isNil(first)
+    fun append(item: T): LinkedList<T> {
+        val last = (this.last as Node<T>)
+        last.next = Node(item, last, NilType.of())
+        this.last = (last.next as Node<T>)
+        return this
+    }
+    fun push(item: T): LinkedList<T> {
+        val first = (this.first as Node<T>)
+        this.first = Node(item, NilType.of(), first)
+        first.prev = this.first
+        return this
     }
 
-fun append(item: T) {
-        if(first == last) {
-            last = Node(item, NilType.of())
-            first.next = last
-        } else {
-            val last = (this.last as Node<T>)
-            last.next =  Node(item, NilType.of())
-            this.last = last.next
-        }
-    }
-
-    private fun filteredList(result:Node<T>?, tail:Node<T>?):LinkedList<T> {
-        val head:Node<T> = result!!
-        val last:Cons<T> = tail!!
-        val list = LinkedList(head.item)
-        list.first = head
-        list.last = last
-
-        return list
-    }
+    fun pop(): Cons<T> = if(NilType.isNil(this.first)) NilType.of() else removeFirst()
+    fun drop(): Cons<T> = if(NilType.isNil(this.last)) NilType.of() else removeLast()
 
     override fun toString(): String {
         val builder = StringBuilder()
@@ -63,12 +44,47 @@ fun append(item: T) {
         return builder.toString()
     }
 
+    private fun removeFirst(): Cons<T> {
+        val first = (this.first as Node<T>)
+        this.first = first.next
+        first.next = NilType.of()
+        first.prev = NilType.of()
+
+        if(NilType.isNil(this.first)) {
+            this.last = this.first
+        }
+        return first
+    }
+
+    private fun removeLast(): Cons<T> {
+        val last = (this.last as Node<T>)
+        this.last = last.prev
+        last.next = NilType.of()
+        last.prev = NilType.of()
+
+        if(NilType.isNil(this.last)) {
+            this.first = this.last
+        }
+        return last
+    }
+
     companion object {
         inline fun <reified T> of(vararg input: T): LinkedList<T> {
             val result = LinkedList(input[0])
             var index = 1
             while(index < input.size) {
                 result.append(input[index])
+                index ++
+            }
+
+            return result
+        }
+
+        inline fun <reified T> ofReversed(vararg input: T): LinkedList<T> {
+            val result = LinkedList(input[0])
+            var index = 1
+            while(index < input.size) {
+                result.push(input[index])
                 index ++
             }
 

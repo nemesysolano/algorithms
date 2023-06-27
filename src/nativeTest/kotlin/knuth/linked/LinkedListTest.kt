@@ -33,6 +33,40 @@ class LinkedListTest {
     }
 
     @Test
+    fun testLinkedListPush() {
+        val numbers:LinkedList<Int> = LinkedList.ofReversed(1, 2, 3)
+        assertEquals("[3,2,1]", numbers.toString())
+    }
+
+    @Test
+    fun testLinkedListPop() {
+        val numbers:LinkedList<Int> = LinkedList.ofReversed(1, 2, 3)
+        var number = 3
+
+        while(!numbers.isEmpty()) {
+            val top = numbers.pop() as Node<Int>
+            assertEquals(top.next, NilType.of())
+            assertEquals(top.prev, NilType.of())
+            assertEquals(number, top.head())
+            number -= 1
+        }
+    }
+
+    @Test
+    fun testLinkedListRemove() {
+        val numbers:LinkedList<Int> = LinkedList.of(1, 2, 3)
+        var number = 3
+
+        while(!numbers.isEmpty()) {
+            val top = numbers.drop() as Node<Int>
+            assertEquals(top.next, NilType.of())
+            assertEquals(top.prev, NilType.of())
+            assertEquals(number, top.head())
+            number -= 1
+        }
+    }
+
+    @Test
     fun testLinkedListForEach() {
         val numbers:Cons<Int> = LinkedList.of(1,2,3)
         var sum = 0

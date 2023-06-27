@@ -1,10 +1,9 @@
 import knuth.linked.LinkedList
-import knuth.Nil
-import knuth.Cons
+import kotlin.test.assertEquals
 
 fun main() {
-    val numbers1:Cons<Int> = LinkedList.of(1,2,3)
-    val numbers2:Cons<Int> = LinkedList.of(1,2,3)
-    println(numbers1.compareTo( numbers2))
+    val numbers:LinkedList<Int> = LinkedList.of(1)
+    numbers.push(2)
+    println( numbers.toString())
     println("Hello, Kotlin/Native!")
 }
